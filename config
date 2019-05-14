@@ -10,32 +10,32 @@
 ;
 ;
 ;   To learn more about how to configure Polybar
-;   go to https://github.com/jaagr/polybar
+;   go to https://github.com/polybar/polybar
 ;
-;   The README contains alot of information
+;   The README contains a lot of information
 ;
 ;==========================================================
 
 [colors]
 ;background = ${xrdb:color0:#222}
-background = #212121
+background = #000000f
 background-alt = #444
 ;foreground = ${xrdb:color7:#222}
 foreground = #dfdfdf
 foreground-alt = #555
-primary = #C7CCD1
-secondary = #C7CCD1
+primary = #ffb52a
+secondary = #e60053
 alert = #bd2c40
 
 [bar/example]
 ;monitor = ${env:MONITOR:HDMI-1}
-width = 100%
-height = 35
-;offset-x = 1%
-;offset-y = 1%
-radius = 0
-fixed-center = true
+width = 40%
+height = 27
 bottom=true
+offset-x = 60%
+;offset-y = 40%
+radius = 6.0
+fixed-center = false
 
 background = ${colors.background}
 foreground = ${colors.foreground}
@@ -43,7 +43,7 @@ foreground = ${colors.foreground}
 line-size = 3
 line-color = #f00
 
-border-size = 0
+border-size = 4
 border-color = #00000000
 
 padding-left = 0
@@ -52,19 +52,17 @@ padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
 
-font-0 = cantarell:pixelsize=11;1
+font-0 = Noto Sans CJK TC:pixelsize=10;1
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
-font-3 = FontAwesome:pixelsize=11;1
 
-modules-left = bspwm i3
-modules-center = xwindow 
-modules-right = filesystem pulseaudio xkeyboard memory cpu wlan eth battery date powermenu
+modules-left = bspwm
+modules-center = mpd
+modules-right = spotify filesystem xbacklight pulseaudio xkeyboard memory cpu wlan eth battery temperature date powermenu
 
 tray-position = right
 tray-padding = 2
-;tray-transparent = true
-;tray-background = #C7CCD1
+;tray-background = #0063ff
 
 ;wm-restack = bspwm
 ;wm-restack = i3
@@ -80,6 +78,14 @@ tray-padding = 2
 cursor-click = pointer
 cursor-scroll = ns-resize
 
+[module/spotify]
+type = custom/script
+interval = 1
+format-prefix = " "
+format = <label>
+exec =python ~/.config/polybar/polybar-spotify/spotify_status.py -f '{play_pause} {song} - {artist}'
+format-underline = #1db954
+
 [module/xwindow]
 type = internal/xwindow
 label = %title:0:30:...%
@@ -88,7 +94,7 @@ label = %title:0:30:...%
 type = internal/xkeyboard
 blacklist-0 = num lock
 
-format-prefix = " "
+format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
 format-prefix-underline = ${colors.secondary}
 
@@ -106,7 +112,7 @@ interval = 25
 
 mount-0 = /
 
-label-mounted =  %percentage_used%%
+label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
 label-unmounted = %mountpoint% not mounted
 label-unmounted-foreground = ${colors.foreground-alt}
 
@@ -146,35 +152,29 @@ label-mode-foreground = #000
 label-mode-background = ${colors.primary}
 
 ; focused = Active workspace on focused monitor
-label-focused = %icon%
+label-focused = %index%
 label-focused-background = ${module/bspwm.label-focused-background}
 label-focused-underline = ${module/bspwm.label-focused-underline}
 label-focused-padding = ${module/bspwm.label-focused-padding}
 
 ; unfocused = Inactive workspace on any monitor
-label-unfocused = %icon%
+label-unfocused = %index%
 label-unfocused-padding = ${module/bspwm.label-occupied-padding}
 
 ; visible = Active workspace on unfocused monitor
-label-visible = %icon%
+label-visible = %index%
 label-visible-background = ${self.label-focused-background}
 label-visible-underline = ${self.label-focused-underline}
 label-visible-padding = ${self.label-focused-padding}
 
 ; urgent = Workspace with urgency hint set
-label-urgent = %icon%
+label-urgent = %index%
 label-urgent-background = ${module/bspwm.label-urgent-background}
 label-urgent-padding = ${module/bspwm.label-urgent-padding}
 
 ; Separator in between workspaces
 ; label-separator = |
 
-ws-icon-0 ="1;    "
-ws-icon-1 ="2;    "
-ws-icon-2 ="3;    "
-ws-icon-3 ="4;    "
-ws-icon-4 ="5;    "
-ws-icon-default ="    "
 
 [module/mpd]
 type = internal/mpd
@@ -214,9 +214,9 @@ card = intel_backlight
 [module/cpu]
 type = internal/cpu
 interval = 2
-format-prefix = ""
+format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #C7CCD1
+format-underline = #f90000
 label = %percentage:2%%
 
 [module/memory]
@@ -224,17 +224,17 @@ type = internal/memory
 interval = 2
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #C7CCD1
+format-underline = #4bffdc
 label = %percentage_used%%
 
 [module/wlan]
 type = internal/network
-interface = wlp0s29f7u6
+interface = wlp0s29f7u7
 interval = 3.0
 
 format-connected = <ramp-signal> <label-connected>
-format-connected-underline = #C7CCD1
-label-connected = 
+format-connected-underline = #9f78e1
+label-connected = %essid%
 
 format-disconnected =
 ;format-disconnected = <label-disconnected>
@@ -277,18 +277,18 @@ time-alt = %H:%M:%S
 
 format-prefix = 
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #C7CCD1
+format-underline = #0a6cf5
 
-label =  %time%
+label = %date% %time%
 
 [module/pulseaudio]
 type = internal/pulseaudio
 
 format-volume = <label-volume> <bar-volume>
-label-volume =  
+label-volume = %percentage%%
 label-volume-foreground = ${root.foreground}
 
-label-muted =  |
+label-muted = 🔇 muted
 label-muted-foreground = #666
 
 bar-volume-width = 10
@@ -312,7 +312,7 @@ bar-volume-empty-foreground = ${colors.foreground-alt}
 type = internal/alsa
 
 format-volume = <label-volume> <bar-volume>
-label-volume = VOL
+label-volume =
 label-volume-foreground = ${root.foreground}
 
 format-muted-prefix = " "
@@ -423,6 +423,7 @@ screenchange-reload = true
 ;compositing-background = screen
 ;compositing-foreground = source
 ;compositing-border = over
+;pseudo-transparency = false
 
 [global/wm]
 margin-top = 5
